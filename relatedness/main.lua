@@ -99,6 +99,7 @@ printf('max epochs = %d\n', num_epochs)
 model:print_config()
 
 -- train
+local tmp_model_save_path = "tmpmodel.th"
 local train_start = sys.clock()
 local best_dev_score = -1.0
 local best_dev_model = model
@@ -129,6 +130,10 @@ for i = 1, num_epochs do
       mem_dim    = args.dim,
     }
     best_dev_model.params:copy(model.params)
+
+    -- write models to disk
+    print('writing tmp model to ' .. tmp_model_save_path)
+    best_dev_model:save(tmp_model_save_path)
   end
 end
 printf('finished training in %.2fs\n', sys.clock() - train_start)
